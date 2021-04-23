@@ -6,6 +6,7 @@ import {
     addItem,
     removeItem
   } from '../../redux/cart/cartAction';
+
 const CheckOutItem = ({ cartItem, clearItem, addItem, removeItem }) => {
     const { name, imageUrl, price, quantity } = cartItem;
     return (
@@ -27,6 +28,7 @@ const CheckOutItem = ({ cartItem, clearItem, addItem, removeItem }) => {
         <div className='remove-button' onClick={() => clearItem(cartItem)}>
           &#10005;
         </div>
+       
       </div>
     );
   };

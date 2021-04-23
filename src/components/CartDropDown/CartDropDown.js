@@ -7,8 +7,11 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { selectCartItems } from "../../redux/cart/cartSelector";
 import { toggleCartHidden } from "../../redux/cart/cartAction";
+import { setCurrentUser } from "../../redux/user/userActions";
+import { selectCurrentUser } from "../../redux/user/userSelector";
 
-const CartDropDown = ({ cartItems, history, dispatch }) => (
+
+const CartDropDown = ({ cartItems, history, toggleCartHidden,currentUser }) => (
   <div className="cart-dropdown">
     <div className="cart-items">
       {cartItems.length ? (
@@ -19,17 +22,30 @@ const CartDropDown = ({ cartItems, history, dispatch }) => (
         <span className="empty-message">Your Cart Is Empty</span>
       )}
     </div>
-    <CustomButton
-      onClick={() => {
-        history.push("/checkout");
-        dispatch(toggleCartHidden());
-      }}
-    >
-      GO TO CHECKOUT
-    </CustomButton>
+    {
+        currentUser ?  (<CustomButton
+        onClick={() => {
+          history.push("/checkout");
+          toggleCartHidden();
+        }}
+      >
+        GO TO CHECKOUT
+      </CustomButton> ):(<h3>You need to Sign In for Checkout</h3>)
+    }
+   
+   
   </div>
 );
 const mapStateToProps = createStructuredSelector({
   cartItems: selectCartItems,
+  currentUser: selectCurrentUser,
 });
-export default withRouter(connect(mapStateToProps)(CartDropDown));
+
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  toggleCartHidden: ()=> dispatch(toggleCartHidden())
+
+});
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(CartDropDown)
+);
